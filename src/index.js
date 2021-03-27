@@ -56,33 +56,33 @@ class Game extends React.Component {
     }
 
     loadSession() {
-        process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+        // process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
         const idToken = this.state.idToken;
-        const request = https.request({
-            host: appURL,
-            port: 8000,
-            path: '/session',
-            method: 'GET',
-            rejectUnauthorized: false,
-            requestCert: false
-        }, function(res){
-            request.on('data', (data) => {
-                const json = JSON.parse(data);
-                this.setState({
-                    sessionView: json
-                })
-            });
-        });
-        request.end();
+        // const request = https.request({
+        //     host: appURL,
+        //     port: 8000,
+        //     path: '/session',
+        //     method: 'GET',
+        //     rejectUnauthorized: false,
+        //     requestCert: false
+        // }, function(res){
+        //     request.on('data', (data) => {
+        //         const json = JSON.parse(data);
+        //         this.setState({
+        //             sessionView: json
+        //         })
+        //     });
+        // });
+        // request.end();
         // TODO: fix net::ERR_CERT_AUTHORITY_INVALID
 
-        // fetch(appURL + '/session', {
-        //     Headers: {"Authorization": "bearer "+idToken.toString()},
-        //     method: 'GET',
-        //     agent: httpsAgent,
-        // })
-        // .then(res => res.json())
-        // .then(json => this.setState({sessionView: json}))
+        fetch(appURL + '/session', {
+            Headers: {"Authorization": "bearer "+idToken.toString()},
+            method: 'GET',
+            agent: httpsAgent,
+        })
+        .then(res => res.json())
+        .then(json => this.setState({sessionView: json}))
     }
 
     handlePassCode(event) {
