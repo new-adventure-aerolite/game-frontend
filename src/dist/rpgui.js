@@ -1,4 +1,4 @@
-RPGUI = (function() {
+var RPGUI = (function() {
 
 /**
 * init rpgui.
@@ -354,7 +354,7 @@ RPGUI.on_load(function()
 function create_progress(elem)
 {
 	// create the containing div for the new progress
-	progress_container = elem;
+	var progress_container = elem;
 
 	// insert the progress container
 	RPGUI.insert_after(progress_container, elem);
@@ -580,7 +580,7 @@ function create_dropdown(elem)
 	(function(elem, select_header, list)
 	{
 		// the function to update dropdown
-		_on_change = function()
+		var _on_change = function()
 		{
 			// set the header html and hide the list
 			if (elem.selectedIndex != -1)
@@ -997,6 +997,7 @@ RPGUI.fire_event = function(element, type)
 // copy all event listeners from one element to the other
 RPGUI.copy_event_listeners = function(from, to)
 {
+	var getEventListeners;
     // copy all event listeners
     if (typeof getEventListeners == "function")
     {
@@ -1010,7 +1011,7 @@ RPGUI.copy_event_listeners = function(from, to)
     }
 
     // now copy all attributes that start with "on"
-    for (attr in from)
+    for (var attr in from)
     {
         if (attr.indexOf("on") === 0)
         {

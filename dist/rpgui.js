@@ -997,6 +997,7 @@ RPGUI.fire_event = function(element, type)
 // copy all event listeners from one element to the other
 RPGUI.copy_event_listeners = function(from, to)
 {
+	var getEventListeners;
     // copy all event listeners
     if (typeof getEventListeners == "function")
     {
@@ -1010,7 +1011,7 @@ RPGUI.copy_event_listeners = function(from, to)
     }
 
     // now copy all attributes that start with "on"
-    for (attr in from)
+    for (var attr in from)
     {
         if (attr.indexOf("on") === 0)
         {
