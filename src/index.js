@@ -41,7 +41,7 @@ class HeroList extends React.Component {
                 <p>please select one hero:</p>
                 <select className="rpgui-list-imp" id="hero-select" size="20" style={{
                     width: "300px"
-                }}>
+                }} onChange={this.props.selectHero}>
                     {heroList.map(hero => {
                         return (
                             <option key={hero.name} value={hero.name}>{hero.name}</option>
@@ -92,6 +92,31 @@ class Game extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.loadSession = this.loadSession.bind(this);
         this.listHeros = this.listHeros.bind(this);
+        this.selectHero = this.selectHero.bind(this);
+    }
+
+    selectHero(event) {
+        var idToken = this.state.idToken;
+        var heroName = event.target.value.toString();
+        fetch(appURL + '/session?hero=' + heroName, {
+            headers: {"Authorization": "bearer "+idToken.toString()},
+            method: 'PUT',
+            agent: httpsAgent
+        })
+        .then(res => {
+            if (res.status === 200) {
+                res.json().then(json => this.setState({
+                    sessionView: json
+                }))
+            }else if (res.status === 401){
+                throw "token is expired"
+            }
+            // res.json()
+        }).catch(_ => {
+            this.setState({
+                idToken: ""
+            })
+        })
     }
 
     listHeros() {
@@ -173,8 +198,6 @@ class Game extends React.Component {
         }
 
         if (sessionView != null) {
-            // TODO remove this once complete the code for HeroList
-            sessionView.hero = {};
             var heroList = this.state.heroList;
             if ((sessionView.hero.name === '' || sessionView.hero.name === null || sessionView.hero.name === undefined) && heroList.length === 0) {
                 this.listHeros();
@@ -183,7 +206,7 @@ class Game extends React.Component {
                 );
             }else if ((sessionView.hero.name === '' || sessionView.hero.name === null || sessionView.hero.name === undefined) && heroList.length !== 0) {
                 return (
-                    <HeroList heroList={heroList}/>
+                    <HeroList heroList={heroList} selectHero={this.selectHero} />
                 );
             }
 
