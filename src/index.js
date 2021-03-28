@@ -27,6 +27,15 @@ const Layout = ({children}) => {
     );
 }
 
+class SessionView extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return ();
+    }
+}
+
 class HeroList extends React.Component {
     constructor(props) {
         super(props);
