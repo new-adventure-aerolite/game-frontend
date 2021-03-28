@@ -32,7 +32,9 @@ class SessionView extends React.Component {
         super(props);
     }
     render() {
-        return ();
+        return (
+            
+        );
     }
 }
 
