@@ -17,7 +17,7 @@ const Layout = ({children}) => {
         <div className="rpgui-content">
           <div className="rpgui-container framed rpgui-draggable" style={{
             height: "600px",
-            width: "800px",
+            width: "900px",
             top: "100px",
             left: "200px"
           }}>
@@ -41,24 +41,6 @@ class SessionView extends React.Component {
                 <div>
                     <p>level: {level}</p>
                 </div>
-                <label>{sessionView.boss.name}</label>
-                <div className="rpgui-progress-left-edge"></div>
-                <div id="boss-hp-bar" className="rpgui-progress-track" style={{
-                    width: "200px"
-                }}>
-                    <div id="boss-hp-bar-fill" className="rpgui-progress-fill red" value={bossHP} style={{
-                        left: "0px",
-                        width: bossHP * 100 + "%"
-                    }}></div>
-                </div>
-                <div className="rpgui-progress-right-edge" style={{
-                    left: "240px"
-                }}></div>
-                <br/><br/><br/><br/><br/>
-                <div className="rpgui-icon sword">{sessionView.boss.attack_power}</div>
-                <div className="rpgui-icon shield">{sessionView.boss.defense_power}</div>
-
-                <br/><br/>
                 <label>{sessionView.hero.name}</label>
                 <div className="rpgui-progress-left-edge"></div>
                 <div id="hero-hp-bar" className="rpgui-progress-track" style={{
@@ -72,13 +54,52 @@ class SessionView extends React.Component {
                 <div className="rpgui-progress-right-edge" style={{
                     left: "240px"
                 }}></div>
-                <br/><br/><br/><br/><br/>
-                <div className="rpgui-icon sword">{sessionView.hero.attack_power}</div>
-                <div className="rpgui-icon shield">{sessionView.hero.defense_power}</div>
 
-                <br/><br/><br/><br/>
+                <label style={{
+                    position: "absolute",
+                    left: "530px"
+                }}>{sessionView.boss.name}</label>
+                <div className="rpgui-progress-left-edge" style={{
+                    left: "520px"
+                }}></div>
+                <div id="boss-hp-bar" className="rpgui-progress-track" style={{
+                    left: "560px",
+                    width: "200px"
+                }}>
+                    <div id="boss-hp-bar-fill" className="rpgui-progress-fill red" value={bossHP} style={{
+                        left: "0px",
+                        width: bossHP * 100 + "%"
+                    }}></div>
+                </div>
+                <div className="rpgui-progress-right-edge" style={{
+                    left: "760px"
+                }}></div>
+
+                <br/><br/><br/><br/><br/>
+                <div className="rpgui-icon sword" style={{
+                    left: "20px",
+                    width: "32px",
+                    height: "32px"
+                }}>{sessionView.hero.attack_power}</div>
+                <div className="rpgui-icon shield" style={{
+                    left: "80px",
+                    width: "32px",
+                    height: "32px"
+                }}>{sessionView.hero.defense_power}</div>
+
+                <div className="rpgui-icon sword" style={{
+                    left: '540px',
+                    width: "32px",
+                    height: "32px"
+                }}>{sessionView.boss.attack_power}</div>
+                <div className="rpgui-icon shield" style={{
+                    left: "600px",
+                    width: "32px",
+                    height: "32px"
+                }}>{sessionView.boss.defense_power}</div>
+
+                <br/><br/><br/><br/><br/><br/>
                 <button className="rpgui-button" type="button" onClick={this.props.fight}><p>Fight</p></button>
-                <br/><br/><br/><br/>
 				<button className="rpgui-button" type="button" onClick={this.props.newGame}><p>New Game</p></button>
                 <button className="rpgui-button" type="button" onClick={this.props.save}><p>Save</p></button>
                 <button className="rpgui-button" type="button" onClick={this.props.quit}><p>Quit</p></button>

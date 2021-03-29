@@ -470,6 +470,9 @@ ul.rpgui-dropdown-imp {
 * Icon styles.
 */
 .rpgui-icon {
+  position: absolute;
+  left: 40px;
+  right: 40px;
   display: inline-block;
   background-size: 100% 100%;
   background-repeat: no-repeat;
