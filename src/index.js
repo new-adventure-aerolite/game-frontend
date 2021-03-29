@@ -162,6 +162,13 @@ class Game extends React.Component {
     }
 
     nextLevel() {
+        var sessionView = this.state.sessionView;
+        var level = sessionView.session.current_level;
+        if (level === 2) {
+            alert("you passed the game");
+            this.newGame();
+            return
+        }
         var idToken = this.state.idToken;
         fetch(appURL + '/session/level', {
             headers: {"Authorization": "bearer "+idToken.toString()},
@@ -204,13 +211,8 @@ class Game extends React.Component {
             if (res.status === 200) {
                 res.json().then(json => {
                     if (json.game_over) {
-                        alert("game over")
-                        this.setState({
-                            heroList: [],
-                            passcode: "",
-                            idToken: "",
-                            sessionView: null
-                        })
+                        alert("game over");
+                        this.newGame();
                     }else if (json.next_level) {
                         this.nextLevel();
                     }else{
@@ -298,6 +300,9 @@ class Game extends React.Component {
         .then(res => {
             if (res.status === 200) {
                 this.setState({
+                    heroList: [],
+                    passcode: "",
+                    idToken: "",
                     sessionView: null
                 })
             }else if (res.status === 401){
