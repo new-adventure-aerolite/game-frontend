@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 // import './index.css';
 import './dist/rpgui.css';
-// import './dist/rpgui.js';
+import './dist/rpgui.js';
 const fetch = require('node-fetch');
 const https = require('https');
 
@@ -19,7 +19,7 @@ const Layout = ({children}) => {
             height: "600px",
             width: "800px",
             top: "100px",
-            left: "400px"
+            left: "200px"
           }}>
           {children}
           </div>
@@ -32,8 +32,57 @@ class SessionView extends React.Component {
         super(props);
     }
     render() {
+        var sessionView = this.props.sessionView;
+        var level = sessionView.session.current_level;
+        var heroHP = sessionView.session.live_hero_blood / sessionView.hero.blood;
+        var bossHP = sessionView.session.live_boss_blood / sessionView.boss.blood;
         return (
-            
+            <Layout>
+                <div>
+                    <p>level: {level}</p>
+                </div>
+                <label>{sessionView.boss.name}</label>
+                <div className="rpgui-progress-left-edge"></div>
+                <div id="boss-hp-bar" className="rpgui-progress-track" style={{
+                    width: "200px"
+                }}>
+                    <div id="boss-hp-bar-fill" className="rpgui-progress-fill red" value={bossHP} style={{
+                        left: "0px",
+                        width: bossHP * 100 + "%"
+                    }}></div>
+                </div>
+                <div className="rpgui-progress-right-edge" style={{
+                    left: "240px"
+                }}></div>
+                <br/><br/><br/><br/><br/>
+                <div className="rpgui-icon sword">{sessionView.boss.attack_power}</div>
+                <div className="rpgui-icon shield">{sessionView.boss.defense_power}</div>
+
+                <br/><br/>
+                <label>{sessionView.hero.name}</label>
+                <div className="rpgui-progress-left-edge"></div>
+                <div id="hero-hp-bar" className="rpgui-progress-track" style={{
+                    width: "200px"
+                }}>
+                    <div id="hero-hp-bar-fill" className="rpgui-progress-fill green" value={heroHP} style={{
+                        left: "0px",
+                        width: heroHP * 100 + "%"
+                    }}></div>
+                </div>
+                <div className="rpgui-progress-right-edge" style={{
+                    left: "240px"
+                }}></div>
+                <br/><br/><br/><br/><br/>
+                <div className="rpgui-icon sword">{sessionView.hero.attack_power}</div>
+                <div className="rpgui-icon shield">{sessionView.hero.defense_power}</div>
+
+                <br/><br/><br/><br/>
+                <button className="rpgui-button" type="button" onClick={this.props.fight}><p>Fight</p></button>
+                <br/><br/><br/><br/>
+				<button className="rpgui-button" type="button" onClick={this.props.newGame}><p>New Game</p></button>
+                <button className="rpgui-button" type="button" onClick={this.props.save}><p>Save</p></button>
+                <button className="rpgui-button" type="button" onClick={this.props.quit}><p>Quit</p></button>
+            </Layout>
         );
     }
 }
@@ -96,7 +145,8 @@ class Game extends React.Component {
         this.state = {
             heroList: [],
             passcode: "",
-            idToken: "eyJhbGciOiJSUzI1NiIsImtpZCI6ImM0MDdiM2JmZDYwM2MyYjcyMjhmNTZmM2YyM2M1NGM3NjgyNmIyZDEifQ.eyJpc3MiOiJodHRwczovL2RleC5lYXN0dXMuY2xvdWRhcHAuYXp1cmUuY29tOjU1NTYvZGV4Iiwic3ViIjoiQ2lRd09HRTROamcwWWkxa1lqZzRMVFJpTnpNdE9UQmhPUzB6WTJReE5qWXhaalUwTmpZU0JXeHZZMkZzIiwiYXVkIjoiZXhhbXBsZS1hcHAiLCJleHAiOjE2MTcwMDkyMTMsImlhdCI6MTYxNjkyMjgxMywiYXRfaGFzaCI6IlF4c1U0aHdrcm8xVnNXbm9qX05qaHciLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJhZG1pbiJ9.mvyOop50loZcb5sAn9wThDS4haIpg43YkLBOyaOXGXedDcPO5QHKQ0PAh0R3pR5DsD9U0t8E2CBGpBjlonntSRLJl3iy1kYWeXHaMxQHE1BNFkH-rbg6FFhDOzwdyhyupORp394LqR2k-boJABNgKP1AeF5KjLooESPtNF3hKhr0EwLsZN1IslTznpm5A8ER7pUKy97346TqPIfL5VY0rLWHcxyYp3-45mSQ6DiJBaN-XP1gouij1ru8nbRRz_LcJzlKRNbEYII9JL_h6OzwIxSwQ16pbsV-DAXn4q5eoA_oneWzwAt4UCQLF6ltvZAqmyyXTgQTPVrNBbUnfY5Xww",
+            // TODO remove this when code done
+            idToken: "eyJhbGciOiJSUzI1NiIsImtpZCI6ImIxNTg0MjQ4YzE4MDdhNjI5ZmVjNTFjYzZjOTc4N2Q4OTI4ZjhjNGEifQ.eyJpc3MiOiJodHRwczovL2RleC5lYXN0dXMuY2xvdWRhcHAuYXp1cmUuY29tOjU1NTYvZGV4Iiwic3ViIjoiQ2dnME5EQXhNamN6TkJJR1oybDBhSFZpIiwiYXVkIjoiZXhhbXBsZS1hcHAiLCJleHAiOjE2MTcwNzU2NDEsImlhdCI6MTYxNjk4OTI0MSwiYXRfaGFzaCI6ImN1MFZNOElIM0dCYlRTbk9KZlB2R2ciLCJlbWFpbCI6InRpYW5xaXVodWFuZ0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZ3JvdXBzIjpbIm5ldy1hZHZlbnR1cmUtYWVyb2xpdGU6YWRtaW4iLCJuZXctYWR2ZW50dXJlLWFlcm9saXRlOmRldmVsb3BlciJdLCJuYW1lIjoiQW5odWktdHFodWFuZyIsInByZWZlcnJlZF91c2VybmFtZSI6IkFuaHVpLXRxaHVhbmcifQ.y00dCt4PBqwc_iUg3KEn-OidxnKLyqdAsVaeRxntunnsoVbGElMt0Q7mLFFviOW1mwkt_3OP5X8Kj9asepUyBZPFx0iH1ByzSuy5ssxv5ukIA2Mt_-06QYYv2tAEbskXbxdpTMWJWQUytv8_1duBlEb0BCUB3GNTiOMCzWD1tfyBgM3SziWcO5x5w_hAULVB6oVOhNk2fjj9q875HLrxVuIg7yFj5rjByTjD-xDlG6Obb9ny_irGWp3DtIfkCUzuHJaPYfe_h5Oswo_O0HM4hlVRi0_3CKGeYuZywEID-Fp6Sf29EVINsUBTOhbPskrDQ_hn5I3pQYczKmvtodXtKg",
             sessionView: null
         };
         this.handlePassCode = this.handlePassCode.bind(this);
@@ -104,6 +154,160 @@ class Game extends React.Component {
         this.loadSession = this.loadSession.bind(this);
         this.listHeros = this.listHeros.bind(this);
         this.selectHero = this.selectHero.bind(this);
+        this.newGame = this.newGame.bind(this);
+        this.quit = this.quit.bind(this);
+        this.save = this.save.bind(this);
+        this.fight = this.fight.bind(this);
+        this.nextLevel = this.nextLevel.bind(this);
+    }
+
+    nextLevel() {
+        var idToken = this.state.idToken;
+        fetch(appURL + '/session/level', {
+            headers: {"Authorization": "bearer "+idToken.toString()},
+            method: 'POST',
+            agent: httpsAgent
+        })
+        .then(res => {
+            if (res.status === 200) {
+                this.loadSession();
+            }else if (res.status === 401){
+                throw "token is expired"
+            }else if (res.status >= 500){
+                res.json().then(json => {
+                    if (json.error.toString().includes("404")) {
+                        alert("you passed the game");
+                        this.setState({
+                            heroList: [],
+                            passcode: "",
+                            idToken: "",
+                            sessionView: null
+                        })
+                    }
+                })
+            }
+        }).catch(_ => {
+            this.setState({
+                idToken: ""
+            })
+        })
+    }
+
+    fight() {
+        var idToken = this.state.idToken;
+        fetch(appURL + '/session/fight', {
+            headers: {"Authorization": "bearer "+idToken.toString()},
+            method: 'PUT',
+            agent: httpsAgent
+        })
+        .then(res => {
+            if (res.status === 200) {
+                res.json().then(json => {
+                    if (json.game_over) {
+                        alert("game over")
+                        this.setState({
+                            heroList: [],
+                            passcode: "",
+                            idToken: "",
+                            sessionView: null
+                        })
+                    }else if (json.next_level) {
+                        this.nextLevel();
+                    }else{
+                        var sessionView = this.state.sessionView;
+                        var session = sessionView.session;
+                        session.live_hero_blood = json.hero_blood;
+                        session.live_boss_blood = json.boss_blood;
+                        sessionView.session = session;
+                        this.setState({
+                            sessionView: sessionView
+                        })
+                    }
+                })
+            }else if (res.status === 401){
+                throw "token is expired"
+            }
+            // }else if (res.status === 500){
+            //     alert("you passed, goodbye")
+            //     this.setState({
+            //         heroList: [],
+            //         passcode: "",
+            //         idToken: "",
+            //         sessionView: null
+            //     })
+            // }
+        }).catch(_ => {
+            this.setState({
+                idToken: ""
+            })
+        })
+    }
+
+    save() {
+        var idToken = this.state.idToken;
+        fetch(appURL + "/session/archive", {
+            headers: {"Authorization": "bearer "+idToken.toString()},
+            method: 'POST',
+            agent: httpsAgent
+        })
+        .then(res => {
+            if (res.status === 200) {
+                alert("game saved")
+            }else if (res.status === 401){
+                throw "token is expired"
+            }
+        }).catch(_ => {
+            this.setState({
+                idToken: ""
+            })
+        })
+    }
+
+    quit() {
+        var idToken = this.state.idToken;
+        fetch(appURL + '/session/quit', {
+            headers: {"Authorization": "bearer "+idToken.toString()},
+            method: 'POST',
+            agent: httpsAgent
+        })
+        .then(res => {
+            if (res.status === 200) {
+                this.setState({
+                    heroList: [],
+                    passcode: "",
+                    idToken: "",
+                    sessionView: null
+                })
+            }else if (res.status === 401){
+                throw "token is expired"
+            }
+        }).catch(_ => {
+            this.setState({
+                idToken: ""
+            })
+        })
+    }
+
+    newGame() {
+        var idToken = this.state.idToken;
+        fetch(appURL + "/session/clear", {
+            headers: {"Authorization": "bearer "+idToken.toString()},
+            method: 'POST',
+            agent: httpsAgent
+        })
+        .then(res => {
+            if (res.status === 200) {
+                this.setState({
+                    sessionView: null
+                })
+            }else if (res.status === 401){
+                throw "token is expired"
+            }
+        }).catch(_ => {
+            this.setState({
+                idToken: ""
+            })
+        })
     }
 
     selectHero(event) {
@@ -222,10 +426,14 @@ class Game extends React.Component {
             }
 
             return (
-                <Layout>
-                    <p>session loaded</p>
-                </Layout>
-              );
+                <SessionView 
+                    sessionView={sessionView} 
+                    newGame={this.newGame} 
+                    quit={this.quit} 
+                    save={this.save}
+                    fight={this.fight}
+                />
+            );
         }
     } // render
 }
