@@ -12,7 +12,7 @@ const httpsAgent = new https.Agent({
       rejectUnauthorized: false,
 });
 
-var appURL = 'https://rpg.eastus.cloudapp.azure.com';
+var appURL = 'https://rpg-game.eastus.cloudapp.azure.com';
 
 const Layout = ({children}) => {
     return (
