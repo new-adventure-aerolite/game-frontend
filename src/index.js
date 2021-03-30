@@ -179,7 +179,7 @@ class PassCode extends React.Component {
         return (
           <Layout>
             <a onClick={this.openLoginURL}>
-              getPassCode
+              login to get your passcode
             </a>
             <p>enter your passcode:</p>
             <hr />
