@@ -172,7 +172,7 @@ class PassCode extends React.Component {
     }
 
     openLoginURL() {
-        window.open(appURL);
+        window.open(appURL + '/login');
     }
 
     render() {
