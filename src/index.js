@@ -10,7 +10,7 @@ const httpsAgent = new https.Agent({
       rejectUnauthorized: false,
 });
 
-var appURL = 'https://app.eastus.cloudapp.azure.com:8000';
+var appURL = 'https://rpg.eastus.cloudapp.azure.com';
 
 const Layout = ({children}) => {
     return (
@@ -76,29 +76,36 @@ class SessionView extends React.Component {
                 }}></div>
 
                 <br/><br/><br/><br/><br/>
-                <div className="rpgui-icon sword" style={{
+                <div className="rpgui-icon weapon-slot" style={{
                     left: "20px",
                     width: "32px",
                     height: "32px"
                 }}>{sessionView.hero.attack_power}</div>
-                <div className="rpgui-icon shield" style={{
+                <div className="rpgui-icon shield-slot" style={{
                     left: "80px",
                     width: "32px",
                     height: "32px"
                 }}>{sessionView.hero.defense_power}</div>
 
-                <div className="rpgui-icon sword" style={{
+                <div className="rpgui-icon weapon-slot" style={{
                     left: '540px',
                     width: "32px",
                     height: "32px"
                 }}>{sessionView.boss.attack_power}</div>
-                <div className="rpgui-icon shield" style={{
+                <div className="rpgui-icon shield-slot" style={{
                     left: "600px",
                     width: "32px",
                     height: "32px"
                 }}>{sessionView.boss.defense_power}</div>
 
-                <br/><br/><br/><br/><br/><br/>
+                <br/><br/>
+                <div className="rpgui-container framed-grey" style={{
+                    height: "320px",
+                    width: "800px"
+                }}>
+
+                </div>
+
                 <button className="rpgui-button" type="button" onClick={this.props.fight}><p>Fight</p></button>
 				<button className="rpgui-button" type="button" onClick={this.props.newGame}><p>New Game</p></button>
                 <button className="rpgui-button" type="button" onClick={this.props.save}><p>Save</p></button>
@@ -141,7 +148,7 @@ class PassCode extends React.Component {
     }
 
     openLoginURL() {
-        window.open('https://authz.eastus.cloudapp.azure.com:5555/login');
+        window.open(appURL);
     }
 
     render() {
@@ -167,7 +174,7 @@ class Game extends React.Component {
             heroList: [],
             passcode: "",
             // TODO remove this when code done
-            idToken: "eyJhbGciOiJSUzI1NiIsImtpZCI6ImIxNTg0MjQ4YzE4MDdhNjI5ZmVjNTFjYzZjOTc4N2Q4OTI4ZjhjNGEifQ.eyJpc3MiOiJodHRwczovL2RleC5lYXN0dXMuY2xvdWRhcHAuYXp1cmUuY29tOjU1NTYvZGV4Iiwic3ViIjoiQ2dnME5EQXhNamN6TkJJR1oybDBhSFZpIiwiYXVkIjoiZXhhbXBsZS1hcHAiLCJleHAiOjE2MTcwNzU2NDEsImlhdCI6MTYxNjk4OTI0MSwiYXRfaGFzaCI6ImN1MFZNOElIM0dCYlRTbk9KZlB2R2ciLCJlbWFpbCI6InRpYW5xaXVodWFuZ0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZ3JvdXBzIjpbIm5ldy1hZHZlbnR1cmUtYWVyb2xpdGU6YWRtaW4iLCJuZXctYWR2ZW50dXJlLWFlcm9saXRlOmRldmVsb3BlciJdLCJuYW1lIjoiQW5odWktdHFodWFuZyIsInByZWZlcnJlZF91c2VybmFtZSI6IkFuaHVpLXRxaHVhbmcifQ.y00dCt4PBqwc_iUg3KEn-OidxnKLyqdAsVaeRxntunnsoVbGElMt0Q7mLFFviOW1mwkt_3OP5X8Kj9asepUyBZPFx0iH1ByzSuy5ssxv5ukIA2Mt_-06QYYv2tAEbskXbxdpTMWJWQUytv8_1duBlEb0BCUB3GNTiOMCzWD1tfyBgM3SziWcO5x5w_hAULVB6oVOhNk2fjj9q875HLrxVuIg7yFj5rjByTjD-xDlG6Obb9ny_irGWp3DtIfkCUzuHJaPYfe_h5Oswo_O0HM4hlVRi0_3CKGeYuZywEID-Fp6Sf29EVINsUBTOhbPskrDQ_hn5I3pQYczKmvtodXtKg",
+            idToken: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjJmZTRkYjUzMjFlOTQyOTA2OGFlYTQwOTk4MzNjZTUwNDlmZjEzNzYifQ.eyJpc3MiOiJodHRwczovL3JwZy5lYXN0dXMuY2xvdWRhcHAuYXp1cmUuY29tL2RleC9kZXgiLCJzdWIiOiJDZ2cwTkRBeE1qY3pOQklHWjJsMGFIVmkiLCJhdWQiOiJuZXctdGVzdC1pZCIsImV4cCI6MTYxNzE1NDc0NiwiaWF0IjoxNjE3MDY4MzQ2LCJhdF9oYXNoIjoiamdPYXcxeGljMVBmQk5aOFdTYnB4QSIsImVtYWlsIjoidGlhbnFpdWh1YW5nQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJncm91cHMiOlsibmV3LWFkdmVudHVyZS1hZXJvbGl0ZTphZG1pbiIsIm5ldy1hZHZlbnR1cmUtYWVyb2xpdGU6ZGV2ZWxvcGVyIl0sIm5hbWUiOiJBbmh1aS10cWh1YW5nIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiQW5odWktdHFodWFuZyJ9.N2ry3kts-xh5s3JLk74prqnn2p0OYkXgRSgBXNPgepEOYI2vLup0tCwQkgngFMjIptIyARBBwRuo9_kqZpqs0pGOs0tX1X8lyk7kLyuW7hFhroZ98BoDFkOWEdAm24OmUkvgal_8PocKwb6qJKcUOru3evpJG89xNudGMrAgAy9NiRMEK6mvWrYfSUWx5vsyvS66N6_0d1CzyWkcu1hVri8Qdr-MsiIlB52PtSjq0PxCmO4pZfuFvYg7jU69k6Aa0tuchrfoPkkNlrZQQ9Grz8JmPj-bwsHcTbDJ9yayPSBqzJ5D-b7SI10pK-8bl_lRz0vBocp8mIgYmwiJDFH4gg",
             sessionView: null
         };
         this.handlePassCode = this.handlePassCode.bind(this);
@@ -412,7 +419,7 @@ class Game extends React.Component {
 
     handleSubmit(event) {
         var passcode = this.state.passcode;
-        var url = 'https://authz.eastus.cloudapp.azure.com:5555/passcode?passcode=' + passcode.toString();
+        var url = appURL + "/passcode?passcode=" + passcode.toString();
         fetch(url)
             .then(res => res.json())
             .then(json => 
