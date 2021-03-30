@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Sword from './sword/sword';
 // import './index.css';
 import './dist/rpgui.css';
 import './dist/rpgui.js';
+import lich from './img/lich.png';
 const fetch = require('node-fetch');
 const https = require('https');
 
@@ -31,8 +33,11 @@ class SessionView extends React.Component {
     constructor(props) {
         super(props);
     }
+
     render() {
         var sessionView = this.props.sessionView;
+        var messages = this.props.messages;
+        messages = messages.slice(Math.max(messages.length - 8, 0));
         var level = sessionView.session.current_level;
         var heroHP = sessionView.session.live_hero_blood / sessionView.hero.blood;
         var bossHP = sessionView.session.live_boss_blood / sessionView.boss.blood;
@@ -100,10 +105,29 @@ class SessionView extends React.Component {
 
                 <br/><br/>
                 <div className="rpgui-container framed-grey" style={{
+                    left: "120px",
                     height: "320px",
-                    width: "800px"
+                    width: "530px"
                 }}>
-
+                    {/* <img src={lich} style={{
+                        position: "absolute",
+                        left: "180px"
+                    }}/>
+                    <Sword left="220px"/>
+                    <img src={lich} style={{
+                        position: "absolute",
+                        left: "260px"
+                    }}/> */}
+                <br/><br/>
+                {
+                    messages.map(message => {
+                        return (
+                            <p>
+                                {message.toString()}
+                            </p>
+                        );
+                    })
+                }
                 </div>
 
                 <button className="rpgui-button" type="button" onClick={this.props.fight}><p>Fight</p></button>
@@ -171,6 +195,7 @@ class Game extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            messages: [],
             heroList: [],
             passcode: "",
             // TODO remove this when code done
@@ -189,7 +214,7 @@ class Game extends React.Component {
         this.nextLevel = this.nextLevel.bind(this);
     }
 
-    nextLevel() {
+    nextLevel(msg) {
         var sessionView = this.state.sessionView;
         var level = sessionView.session.current_level;
         if (level === 2) {
@@ -204,8 +229,13 @@ class Game extends React.Component {
             agent: httpsAgent
         })
         .then(res => {
+            var msgs = [];
+            if (typeof(msg) === 'string') {
+                msgs.push(msg)
+            }
+            msgs.push('go to the next level');
             if (res.status === 200) {
-                this.loadSession();
+                this.loadSession(msgs);
             }else if (res.status === 401){
                 throw "token is expired"
             }else if (res.status >= 500){
@@ -213,6 +243,7 @@ class Game extends React.Component {
                     if (json.error.toString().includes("404")) {
                         alert("you passed the game");
                         this.setState({
+                            messages: [],
                             heroList: [],
                             passcode: "",
                             idToken: "",
@@ -242,15 +273,21 @@ class Game extends React.Component {
                         alert("game over");
                         this.newGame();
                     }else if (json.next_level) {
-                        this.nextLevel();
+                        this.nextLevel('you defeat the boss');
                     }else{
                         var sessionView = this.state.sessionView;
                         var session = sessionView.session;
+                        var messages = this.state.messages;
+
+                        var reducedHeroBlood = json.hero_blood - session.live_hero_blood;
+                        var reducedBossBlood = json.boss_blood - session.live_boss_blood;
+                        messages.push('bero blood: ' + reducedHeroBlood + ' <-> boss blood: ' + reducedBossBlood);
                         session.live_hero_blood = json.hero_blood;
                         session.live_boss_blood = json.boss_blood;
                         sessionView.session = session;
                         this.setState({
-                            sessionView: sessionView
+                            sessionView: sessionView,
+                            messages: messages
                         })
                     }
                 })
@@ -282,7 +319,11 @@ class Game extends React.Component {
         })
         .then(res => {
             if (res.status === 200) {
-                alert("game saved")
+                var messages = this.state.messages;
+                messages.push('game saved');
+                this.setState({
+                    messages: messages
+                })
             }else if (res.status === 401){
                 throw "token is expired"
             }
@@ -303,6 +344,7 @@ class Game extends React.Component {
         .then(res => {
             if (res.status === 200) {
                 this.setState({
+                    messages: [],
                     heroList: [],
                     passcode: "",
                     idToken: "",
@@ -328,6 +370,7 @@ class Game extends React.Component {
         .then(res => {
             if (res.status === 200) {
                 this.setState({
+                    messages: [],
                     heroList: [],
                     passcode: "",
                     idToken: "",
@@ -345,6 +388,8 @@ class Game extends React.Component {
 
     selectHero(event) {
         var idToken = this.state.idToken;
+        var messages = this.state.messages;
+        messages.push("you selected the hero");
         var heroName = event.target.value.toString();
         fetch(appURL + '/session?hero=' + heroName, {
             headers: {"Authorization": "bearer "+idToken.toString()},
@@ -354,7 +399,8 @@ class Game extends React.Component {
         .then(res => {
             if (res.status === 200) {
                 res.json().then(json => this.setState({
-                    sessionView: json
+                    sessionView: json,
+                    messages: messages
                 }))
             }else if (res.status === 401){
                 throw "token is expired"
@@ -390,8 +436,16 @@ class Game extends React.Component {
         })
     }
 
-    loadSession() {
+    loadSession(msgs) {
         var idToken = this.state.idToken;
+        var messages = this.state.messages;
+        if (msgs !== undefined && Array.isArray(msgs)) {
+            msgs.map(msg => {
+                if (typeof(msg) === 'string') {
+                    messages.push(msg)
+                }
+            })
+        }
         fetch(appURL + '/session', {
             method: 'GET',
             headers: {"Authorization": "bearer "+idToken.toString()},
@@ -400,7 +454,8 @@ class Game extends React.Component {
         .then(res => {
             if (res.status === 200) {
                 res.json().then(json => this.setState({
-                    sessionView: json
+                    sessionView: json,
+                    messages: messages
                 }))
             }else if (res.status === 401){
                 throw "token is expired"
@@ -437,7 +492,7 @@ class Game extends React.Component {
 
         var sessionView = this.state.sessionView;
         if (sessionView === null) {
-            this.loadSession();
+            this.loadSession(['loading session...']);
             return (
                 <Layout>
                     <p>loading...</p>
@@ -457,7 +512,7 @@ class Game extends React.Component {
                     <HeroList heroList={heroList} selectHero={this.selectHero} />
                 );
             }
-
+            var messages = this.state.messages;
             return (
                 <SessionView 
                     sessionView={sessionView} 
@@ -465,6 +520,7 @@ class Game extends React.Component {
                     quit={this.quit} 
                     save={this.save}
                     fight={this.fight}
+                    messages={messages}
                 />
             );
         }

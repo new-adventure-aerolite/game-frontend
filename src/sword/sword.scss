@@ -1,0 +1,19 @@
+.sword__slash {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+  
+    z-index: 1000;
+  
+    /* this is for animating the 'steps' */
+    animation: swordSlash .35s steps(8);
+    animation-direction: reverse;
+    background-position-x: 0px;
+}
+  
+@keyframes swordSlash {
+    100% {
+        background-position-x: 320px;
+    }
+}
+  
