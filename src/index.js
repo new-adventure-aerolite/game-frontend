@@ -198,8 +198,7 @@ class Game extends React.Component {
             messages: [],
             heroList: [],
             passcode: "",
-            // TODO remove this when code done
-            idToken: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjJmZTRkYjUzMjFlOTQyOTA2OGFlYTQwOTk4MzNjZTUwNDlmZjEzNzYifQ.eyJpc3MiOiJodHRwczovL3JwZy5lYXN0dXMuY2xvdWRhcHAuYXp1cmUuY29tL2RleC9kZXgiLCJzdWIiOiJDZ2cwTkRBeE1qY3pOQklHWjJsMGFIVmkiLCJhdWQiOiJuZXctdGVzdC1pZCIsImV4cCI6MTYxNzE1NDc0NiwiaWF0IjoxNjE3MDY4MzQ2LCJhdF9oYXNoIjoiamdPYXcxeGljMVBmQk5aOFdTYnB4QSIsImVtYWlsIjoidGlhbnFpdWh1YW5nQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJncm91cHMiOlsibmV3LWFkdmVudHVyZS1hZXJvbGl0ZTphZG1pbiIsIm5ldy1hZHZlbnR1cmUtYWVyb2xpdGU6ZGV2ZWxvcGVyIl0sIm5hbWUiOiJBbmh1aS10cWh1YW5nIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiQW5odWktdHFodWFuZyJ9.N2ry3kts-xh5s3JLk74prqnn2p0OYkXgRSgBXNPgepEOYI2vLup0tCwQkgngFMjIptIyARBBwRuo9_kqZpqs0pGOs0tX1X8lyk7kLyuW7hFhroZ98BoDFkOWEdAm24OmUkvgal_8PocKwb6qJKcUOru3evpJG89xNudGMrAgAy9NiRMEK6mvWrYfSUWx5vsyvS66N6_0d1CzyWkcu1hVri8Qdr-MsiIlB52PtSjq0PxCmO4pZfuFvYg7jU69k6Aa0tuchrfoPkkNlrZQQ9Grz8JmPj-bwsHcTbDJ9yayPSBqzJ5D-b7SI10pK-8bl_lRz0vBocp8mIgYmwiJDFH4gg",
+            idToken: "",
             sessionView: null
         };
         this.handlePassCode = this.handlePassCode.bind(this);
@@ -217,7 +216,7 @@ class Game extends React.Component {
     nextLevel(msg) {
         var sessionView = this.state.sessionView;
         var level = sessionView.session.current_level;
-        if (level === 2) {
+        if (level === 4) {
             alert("you passed the game");
             this.newGame();
             return
@@ -246,7 +245,6 @@ class Game extends React.Component {
                             messages: [],
                             heroList: [],
                             passcode: "",
-                            idToken: "",
                             sessionView: null
                         })
                     }
@@ -281,7 +279,7 @@ class Game extends React.Component {
 
                         var reducedHeroBlood = json.hero_blood - session.live_hero_blood;
                         var reducedBossBlood = json.boss_blood - session.live_boss_blood;
-                        messages.push('bero blood: ' + reducedHeroBlood + ' <-> boss blood: ' + reducedBossBlood);
+                        messages.push(sessionView.hero.name + ': ' + reducedHeroBlood + ' <-> ' + sessionView.boss.name + ': ' + reducedBossBlood);
                         session.live_hero_blood = json.hero_blood;
                         session.live_boss_blood = json.boss_blood;
                         sessionView.session = session;
@@ -373,7 +371,6 @@ class Game extends React.Component {
                     messages: [],
                     heroList: [],
                     passcode: "",
-                    idToken: "",
                     sessionView: null
                 })
             }else if (res.status === 401){
