@@ -14,16 +14,40 @@ const httpsAgent = new https.Agent({
 
 var appURL = 'https://rpg-game.eastus.cloudapp.azure.com';
 
-const Layout = ({children}) => {
+const Layout = ({children, sessionView}) => {
     return (
         <div className="rpgui-content">
           <div className="rpgui-container framed rpgui-draggable" style={{
-            height: "600px",
+            height: "800px",
             width: "900px",
-            top: "100px",
+            top: "0px",
             left: "200px"
           }}>
           {children}
+          {
+              sessionView && 
+              <div className="rpgui-container framed rpgui-draggable" style={{
+                  height: "400px",
+                  width: "300px",
+                  top: "0px",
+                  left: "1100px"
+              }}>
+                  <p>{sessionView.hero.name}:</p>
+                  <p>{sessionView.hero.details}</p>
+              </div>
+          }
+          {
+              sessionView && 
+              <div className="rpgui-container framed rpgui-draggable" style={{
+                  height: "400px",
+                  width: "300px",
+                  top: "400px",
+                  left: "1100px"
+              }}>
+                  <p>{sessionView.boss.name}:</p>
+                  <p>{sessionView.boss.details}</p>
+              </div>
+          }
           </div>
         </div>
     );
@@ -42,7 +66,7 @@ class SessionView extends React.Component {
         var heroHP = sessionView.session.live_hero_blood / sessionView.hero.blood;
         var bossHP = sessionView.session.live_boss_blood / sessionView.boss.blood;
         return (
-            <Layout>
+            <Layout sessionView={sessionView}>
                 <div>
                     <p>level: {level}</p>
                 </div>
@@ -152,7 +176,7 @@ class HeroList extends React.Component {
             <Layout>
                 <p>please select one hero:</p>
                 <select className="rpgui-list-imp" id="hero-select" size="20" style={{
-                    width: "300px"
+                    width: "600px"
                 }} onChange={this.props.selectHero}>
                     {heroList.map(hero => {
                         return (
