@@ -11,6 +11,8 @@ game frontend is used for interactive between user and app-server.
 ```sh
 $ git clone https://github.com/new-adventure-aerolite/game-frontend.git
 
+$ cd game-frontend
+
 $ npm install
 
 $ npm start
