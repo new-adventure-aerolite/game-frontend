@@ -264,7 +264,7 @@ class Game extends React.Component {
             }else if (res.status >= 500){
                 res.json().then(json => {
                     if (json.error.toString().includes("404")) {
-                        alert("you passed the game");
+                        alert("WIN!!!");
                         this.setState({
                             messages: [],
                             heroList: [],
