@@ -105,23 +105,23 @@ class SessionView extends React.Component {
                 }}></div>
 
                 <br/><br/><br/><br/><br/>
-                <div className="rpgui-icon weapon-slot" style={{
+                <div className="rpgui-icon sword" style={{
                     left: "20px",
                     width: "32px",
                     height: "32px"
                 }}>{sessionView.hero.attack_power}</div>
-                <div className="rpgui-icon shield-slot" style={{
+                <div className="rpgui-icon shield" style={{
                     left: "80px",
                     width: "32px",
                     height: "32px"
                 }}>{sessionView.hero.defense_power}</div>
 
-                <div className="rpgui-icon weapon-slot" style={{
+                <div className="rpgui-icon sword" style={{
                     left: '540px',
                     width: "32px",
                     height: "32px"
                 }}>{sessionView.boss.attack_power}</div>
-                <div className="rpgui-icon shield-slot" style={{
+                <div className="rpgui-icon shield" style={{
                     left: "600px",
                     width: "32px",
                     height: "32px"
@@ -130,7 +130,7 @@ class SessionView extends React.Component {
                 <br/><br/>
                 <div className="rpgui-container framed-grey" style={{
                     left: "120px",
-                    height: "320px",
+                    height: "620px",
                     width: "530px"
                 }}>
                     {/* <img src={lich} style={{
